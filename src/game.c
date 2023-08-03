@@ -4,15 +4,18 @@
 #include <stdlib.h>
 #include <time.h>
 
-// Game loop frequency in frames per second
-#define FPS 30
-#define FRAME_TIME_MS (1000 / FPS)
-#define DESIRED_WIDTH 70
-#define DESIRED_HEIGHT 25
+#include "constants.h"
 
-// add entities
+// Game loop frequency in frames per second
+#define FPS 10
+#define FRAME_TIME_MS (1000 / FPS)
+
+// Entities
 Snake* snake;
 Apple* apple;
+
+// Variables
+int score = 0;
 
 // Variables for time measurement
 clock_t currentTime, previousTime;
@@ -50,17 +53,11 @@ int init() {
     // init use of colors on terminal
     start_color();
 
-    // Get the current number of rows and columns
-    int g_height, g_width;
-    getmaxyx(wnd, g_height, g_width);
+    // resize the game field
+    resize_term(GAME_HEIGHT, GAME_WIDTH);
 
-    g_width = g_width < DESIRED_WIDTH ? g_width : DESIRED_WIDTH;
-    g_height = g_height < DESIRED_HEIGHT ? g_height : DESIRED_HEIGHT;
-
-    // draw box around screen
-    attron(A_BOLD);
-    box(wnd, 0, 0);
-    attroff(A_BOLD);
+    // draw a box around the screen with the char '|' and '-'
+    box(wnd, '|', '-');
 
     return 1;
 }
@@ -121,11 +118,44 @@ void input() {
 void update(float deltaTime) {
     update_apple(apple);
     update_snake(snake);
+    check_for_collisions();
+    is_outside_boundary();
 }
 
 void render() {
     render_apple(apple);
     render_snake(snake);
+    char* greetings = "Snake written in C for the Terminal. ";
+    char* scoreText = "Score: ";
+    char combinedString[100];  // Choose an appropriate buffer size
+    sprintf(combinedString, "%s%d", scoreText, score);
+    mvprintw(24, 2, "%s", combinedString);
+    mvprintw(24, 30, "%s", greetings);
+}
+
+void check_for_collisions() {
+    if (apple->base.pos.x == snake->base.pos.x &&
+        apple->base.pos.y == snake->base.pos.y) {
+        // collision between snake and apple occured
+        // add one point to the score
+        score += 1;
+
+        // set new random position for the apple
+        reset_apple_position(apple);
+
+        // grow snake by 1
+        grow_snake(snake, 1);
+    }
+}
+
+void is_outside_boundary() {
+    int x = snake->base.pos.x;
+    int y = snake->base.pos.y;
+
+    if (x < 1 || x > GAME_WIDTH - 1 || y < 1 || y > GAME_HEIGHT - 1) {
+        is_running = false;
+        printf("You score is: %d", score);
+    }
 }
 
 void shutdown() { endwin(); }

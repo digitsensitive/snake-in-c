@@ -3,6 +3,7 @@ CFLAGS = -std=c11 -Wall
 LDFLAGS = -lncurses
 
 SRCS = src/main.c \
+	   src/utils.c \
 	   src/game.c \
 	   src/entities/entity.c \
 	   src/entities/snake.c \

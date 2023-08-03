@@ -36,3 +36,5 @@ void move_snake(Snake* snake) {
     snake->base.pos.x += snake->dir.x;
     snake->base.pos.y += snake->dir.y;
 }
+
+void grow_snake(Snake* snake, int rate) {}
