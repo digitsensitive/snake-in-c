@@ -56,8 +56,8 @@ int init() {
     // resize the game field
     resize_term(GAME_HEIGHT, GAME_WIDTH);
 
-    // draw a box around the screen with the char '|' and '-'
-    box(wnd, '|', '-');
+    // draw a box around the screen
+    box(wnd, 0, 0);
 
     return 1;
 }
