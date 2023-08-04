@@ -139,6 +139,11 @@ void render() {
 }
 
 void check_for_collisions() {
+    if (snake_hit_snake(snake)) {
+        is_running = false;
+        printf("You score is: %d", score);
+    }
+
     if (apple->pos.x == snake->body->pos.x &&
         apple->pos.y == snake->body->pos.y) {
         // collision between snake and apple occured

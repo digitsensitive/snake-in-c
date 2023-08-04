@@ -49,8 +49,10 @@ Snake* create_snake(int x, int y) {
 }
 
 void set_snake_direction(Snake* snake, int x, int y) {
-    snake->dir.x = x;
-    snake->dir.y = y;
+    if (snake->dir.x != -x || snake->dir.y != -y) {
+        snake->dir.x = x;
+        snake->dir.y = y;
+    }
 }
 
 void move_snake(Snake* self) {
@@ -104,4 +106,18 @@ void free_snake(Snake* self) {
         current = current->next;
         free(temp);
     }
+}
+
+int snake_hit_snake(Snake* self) {
+    BodyNode* head = self->body;
+    BodyNode* current = head->next;
+
+    while (current != NULL) {
+        if (head->pos.x == current->pos.x && head->pos.y == current->pos.y) {
+            return 1;
+        }
+        current = current->next;
+    }
+
+    return 0;
 }
