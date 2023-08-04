@@ -11,14 +11,38 @@ void update_snake(Snake* self) {
 
 void render_snake(Snake* self) {
     Snake* snake = (Snake*)self;
-    mvaddch(snake->base.pos.y, snake->base.pos.x, snake->base.display_char);
+
+    BodyNode* current = self->body;
+    while (current != NULL) {
+        attron(COLOR_PAIR(self->base.color));
+        mvaddch(current->pos.y, current->pos.x, snake->base.display_char);
+        attroff(COLOR_PAIR(self->base.color));
+        current = current->next;
+    }
+}
+
+BodyNode* create_body_part(Snake* self, int x, int y) {
+    BodyNode* body = malloc(sizeof(BodyNode));
+
+    if (body != NULL) {
+        body->pos.x = x;
+        body->pos.y = y;
+        body->next = NULL;
+    } else {
+        printf("Memory allocation failed!\n");
+    }
+
+    return body;
 }
 
 Snake* create_snake(int x, int y) {
     Snake* snake = (Snake*)malloc(sizeof(Snake));
+
+    // init base properties
     snake->base.display_char = 'X';
-    snake->base.pos.x = x;
-    snake->base.pos.y = y;
+    snake->base.color = 1;
+    snake->is_growing = false;
+    snake->body = create_body_part(snake, x, y);
 
     set_snake_direction(snake, 1, 0);
     return snake;
@@ -29,12 +53,55 @@ void set_snake_direction(Snake* snake, int x, int y) {
     snake->dir.y = y;
 }
 
-void move_snake(Snake* snake) {
-    // clear current char cell
-    mvaddch(snake->base.pos.y, snake->base.pos.x, ' ');
+void move_snake(Snake* self) {
+    BodyNode* current = self->body;
+    while (current != NULL) {
+        // clear current char cell
+        mvaddch(current->pos.y, current->pos.x, ' ');
+        current = current->next;
+    }
 
-    snake->base.pos.x += snake->dir.x;
-    snake->base.pos.y += snake->dir.y;
+    BodyNode* curr = self->body;
+    int prevX, prevY, tempX, tempY;
+
+    // Move the head
+    prevX = curr->pos.x;
+    prevY = curr->pos.y;
+    curr->pos.x += self->dir.x;
+    curr->pos.y += self->dir.y;
+
+    // Move the rest of the segments
+    while (curr->next != NULL) {
+        curr = curr->next;
+        tempX = curr->pos.x;
+        tempY = curr->pos.y;
+        curr->pos.x = prevX;
+        curr->pos.y = prevY;
+        prevX = tempX;
+        prevY = tempY;
+    }
+
+    if (self->is_growing) {
+        BodyNode* tail = self->body;
+        while (tail->next != NULL) {
+            tail = tail->next;
+        }
+
+        tail->next = malloc(sizeof(BodyNode));
+        tail->next->pos.x = prevX;
+        tail->next->pos.y = prevY;
+        tail->next->next = NULL;
+        self->is_growing = 0;
+    }
 }
 
-void grow_snake(Snake* snake, int rate) {}
+void is_growing(Snake* self) { self->is_growing = 1; }
+
+void free_snake(Snake* self) {
+    BodyNode* current = self->body;
+    while (current != NULL) {
+        BodyNode* temp = current;
+        current = current->next;
+        free(temp);
+    }
+}

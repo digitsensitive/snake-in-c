@@ -53,6 +53,10 @@ int init() {
     // init use of colors on terminal
     start_color();
 
+    // define color sets
+    init_pair(1, COLOR_WHITE, COLOR_WHITE);  // snake
+    init_pair(2, COLOR_GREEN, COLOR_GREEN);  // apple
+
     // resize the game field
     resize_term(GAME_HEIGHT, GAME_WIDTH);
 
@@ -84,6 +88,7 @@ void run() {
         refresh();
     }
 
+    free_snake(snake);
     free(snake);
 }
 
@@ -134,8 +139,8 @@ void render() {
 }
 
 void check_for_collisions() {
-    if (apple->base.pos.x == snake->base.pos.x &&
-        apple->base.pos.y == snake->base.pos.y) {
+    if (apple->pos.x == snake->body->pos.x &&
+        apple->pos.y == snake->body->pos.y) {
         // collision between snake and apple occured
         // add one point to the score
         score += 1;
@@ -143,14 +148,14 @@ void check_for_collisions() {
         // set new random position for the apple
         reset_apple_position(apple);
 
-        // grow snake by 1
-        grow_snake(snake, 1);
+        // grow snake
+        is_growing(snake);
     }
 }
 
 void is_outside_boundary() {
-    int x = snake->base.pos.x;
-    int y = snake->base.pos.y;
+    int x = snake->body->pos.x;
+    int y = snake->body->pos.y;
 
     if (x < 1 || x > GAME_WIDTH - 1 || y < 1 || y > GAME_HEIGHT - 1) {
         is_running = false;

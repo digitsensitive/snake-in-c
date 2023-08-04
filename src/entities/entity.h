@@ -7,8 +7,6 @@ typedef struct {
 
 typedef struct {
     int id;
+    int color;
     char display_char;
-    Position pos;
 } Entity;
-
-void init_entity();

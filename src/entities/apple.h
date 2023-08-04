@@ -4,7 +4,7 @@
 
 typedef struct {
     Entity base;
-    int health_points;
+    Position pos;
 } Apple;
 
 Apple* create_apple(int x, int y);
