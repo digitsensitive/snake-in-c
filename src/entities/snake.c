@@ -41,7 +41,7 @@ Snake* create_snake(int x, int y) {
     // init base properties
     snake->base.display_char = 'X';
     snake->base.color = 1;
-    snake->is_growing = false;
+    snake->is_growing = 0;
     snake->body = create_body_part(snake, x, y);
 
     set_snake_direction(snake, 1, 0);
