@@ -17,6 +17,7 @@
     "signal.h": "c",
     "__locale": "c",
     "entity.h": "c",
-    "apple.h": "c"
+    "apple.h": "c",
+    "ncurses_window.h": "c"
   }
 }

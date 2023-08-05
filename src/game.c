@@ -5,6 +5,7 @@
 #include <time.h>
 
 #include "constants.h"
+#include "ncurses/ncurses_window.h"
 
 // Game loop frequency in frames per second
 #define FPS 10
@@ -21,11 +22,10 @@ int score = 0;
 clock_t currentTime, previousTime;
 float deltaTime;
 
-WINDOW* wnd;
 bool is_running = true;
 
 int init() {
-    if ((wnd = initscr()) == NULL) {
+    if (!init_ncurses_window()) {
         fprintf(stderr, "Error initializing ncurses.\n");
         return 0;
     }
@@ -36,10 +36,10 @@ int init() {
     refresh();
 
     // enable function keys
-    keypad(wnd, true);
+    keypad(main_window, true);
 
     // disable input blocking (f.e. for getch() and wgetch())
-    nodelay(wnd, true);
+    nodelay(main_window, true);
 
     // set the cursor mode to "Invisible"
     curs_set(0);
@@ -61,7 +61,7 @@ int init() {
     resize_term(GAME_HEIGHT, GAME_WIDTH);
 
     // draw a box around the screen
-    box(wnd, 0, 0);
+    box(main_window, 0, 0);
 
     return 1;
 }
@@ -93,7 +93,7 @@ void run() {
 }
 
 void input() {
-    int in_char = wgetch(wnd);
+    int in_char = wgetch(main_window);
 
     switch (in_char) {
         case 'q':
