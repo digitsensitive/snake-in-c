@@ -1,6 +1,6 @@
 CC = clang
 CFLAGS = -std=c11 -Wall
-LDFLAGS = -lncurses
+LDFLAGS = -Lvendors/ncurses -lncurses
 
 SRCS = src/main.c \
 	   src/utils.c \
