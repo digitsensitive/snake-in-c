@@ -1,3 +1,0 @@
-[submodule "vendors/ncurses"]
-	path = vendors/ncurses
-	url = https://github.com/mirror/ncurses
