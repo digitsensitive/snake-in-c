@@ -5,6 +5,7 @@
 #include <time.h>
 
 #include "constants.h"
+#include "ncurses/ncurses_utils.h"
 #include "ncurses/ncurses_window.h"
 
 // Game loop frequency in frames per second
@@ -44,18 +45,11 @@ int init() {
     // set the cursor mode to "Invisible"
     curs_set(0);
 
-    if (!has_colors()) {
+    // init colors for the terminal
+    if (!init_colors()) {
         endwin();
-        printf("ERROR: Terminal does not support Color.\n");
         return 0;
     }
-
-    // init use of colors on terminal
-    start_color();
-
-    // define color sets
-    init_pair(1, COLOR_WHITE, COLOR_WHITE);  // snake
-    init_pair(2, COLOR_GREEN, COLOR_GREEN);  // apple
 
     // resize the game field
     resize_term(GAME_HEIGHT, GAME_WIDTH);

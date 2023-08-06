@@ -4,11 +4,12 @@
 #include <stdlib.h>
 
 #include "../constants.h"
+#include "../ncurses/ncurses_utils.h"
 
 Apple* create_apple(int x, int y) {
     Apple* apple = (Apple*)malloc(sizeof(Apple));
     apple->base.display_char = 'O';
-    apple->base.color = 2;
+    apple->base.color = ANSI_COLOR_GREEN;
     apple->pos.x = x;
     apple->pos.y = y;
 
