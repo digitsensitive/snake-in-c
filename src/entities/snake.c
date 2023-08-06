@@ -1,8 +1,10 @@
 
 #include "snake.h"
 
-#include <ncurses.h>
+#include <stdio.h>
 #include <stdlib.h>
+
+#include "../ncurses/ncurses_utils.h"
 
 void update_snake(Snake* self) {
     Snake* snake = (Snake*)self;
@@ -14,9 +16,8 @@ void render_snake(Snake* self) {
 
     BodyNode* current = self->body;
     while (current != NULL) {
-        attron(COLOR_PAIR(self->base.color));
-        mvaddch(current->pos.y, current->pos.x, snake->base.display_char);
-        attroff(COLOR_PAIR(self->base.color));
+        draw_char(snake->base.display_char, current->pos.x, current->pos.y,
+                  self->base.color);
         current = current->next;
     }
 }
@@ -59,7 +60,7 @@ void move_snake(Snake* self) {
     BodyNode* current = self->body;
     while (current != NULL) {
         // clear current char cell
-        mvaddch(current->pos.y, current->pos.x, ' ');
+        draw_char(' ', current->pos.x, current->pos.y, 0);
         current = current->next;
     }
 
