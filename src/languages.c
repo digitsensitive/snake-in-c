@@ -8,8 +8,8 @@ int current_language = EN;
 struct localized_text LOCALES[] = {
     {DE, "snake_description", "Snake programmiert in C für das Terminal."},
     {EN, "snake_description", "Snake written in C for the terminal."},
-    {DE, "score_text", "Punktzahl:"},
-    {EN, "score_text", "Score:"},
+    {DE, "score_text", "Punktzahl: "},
+    {EN, "score_text", "Score: "},
 };
 
 // set new language

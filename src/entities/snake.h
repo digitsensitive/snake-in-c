@@ -16,7 +16,7 @@ struct Snake {
     int is_growing;
 };
 
-Snake* create_snake(int x, int y);
+Snake* create_snake(char ch, int x, int y);
 BodyNode* create_body_part(Snake* self, int x, int y);
 
 void update_snake(Snake* self);

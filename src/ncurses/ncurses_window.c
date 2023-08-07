@@ -1,5 +1,8 @@
 #include "ncurses_window.h"
 
+const int WINDOW_WIDTH = 70;
+const int WINDOW_HEIGHT = 25;
+
 WINDOW* main_window;
 
 int init_ncurses_window() {

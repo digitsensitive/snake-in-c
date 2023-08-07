@@ -36,11 +36,11 @@ BodyNode* create_body_part(Snake* self, int x, int y) {
     return body;
 }
 
-Snake* create_snake(int x, int y) {
+Snake* create_snake(char ch, int x, int y) {
     Snake* snake = (Snake*)malloc(sizeof(Snake));
 
     // init base properties
-    snake->base.display_char = 'X';
+    snake->base.display_char = ch;
     snake->base.color = ANSI_COLOR_YELLOW;
     snake->is_growing = 0;
     snake->body = create_body_part(snake, x, y);

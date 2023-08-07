@@ -1,17 +1,15 @@
 #include "game.h"
 
-#include <ncurses.h>
 #include <stdlib.h>
 #include <time.h>
 
-#include "constants.h"
+#include "clock.h"
+#include "entities/apple.h"
+#include "entities/snake.h"
 #include "languages.h"
 #include "ncurses/ncurses_utils.h"
 #include "ncurses/ncurses_window.h"
-
-// Game loop frequency in frames per second
-#define FPS 10
-#define FRAME_TIME_MS (1000 / FPS)
+#include "utils.h"
 
 // Entities
 Snake* snake;
@@ -19,11 +17,7 @@ Apple* apple;
 
 // Variables
 int score = 0;
-
-// Variables for time measurement
-clock_t currentTime, previousTime;
-float deltaTime;
-
+char score_string[30];
 bool is_running = true;
 
 int init() {
@@ -53,10 +47,16 @@ int init() {
     }
 
     // resize the game field
-    resize_term(GAME_HEIGHT, GAME_WIDTH);
+    resize_term(WINDOW_HEIGHT, WINDOW_WIDTH);
 
     // draw a box around the screen
     box(main_window, 0, 0);
+
+    // resize the window to fit text at the bottom
+    resize_term(WINDOW_HEIGHT + 1, WINDOW_WIDTH);
+
+    // Seed the random number generator with the current time
+    srand(time(NULL));
 
     return 1;
 }
@@ -65,23 +65,23 @@ void run() {
     // set language
     set_language(EN);
 
-    snake = create_snake(10, 5);
-    apple = create_apple(20, 10);
+    snake = create_snake('X', 10, 5);
+    apple = create_apple('O', 20, 10);
 
     while (is_running) {
         input();
 
         // Calculate time elapsed since the last iteration
-        currentTime = clock();
-        deltaTime = (float)(currentTime - previousTime) / CLOCKS_PER_SEC;
-        previousTime = currentTime;
+        calculate_time_elapsed();
 
         // Update the game state based on time elapsed
-        update(deltaTime);
+        update(get_delta_time());
+
+        // Render
         render();
 
         // Delay to achieve the desired FPS
-        napms(FRAME_TIME_MS);
+        delay_clock();
 
         refresh();
     }
@@ -132,8 +132,11 @@ void render() {
 }
 
 void render_gui() {
-    draw_text(get_localized_text("score_text"), 2, 24);
-    draw_text(get_localized_text("snake_description"), 30, 24);
+    // combine score string with score int
+    sprintf(score_string, "%s%d", get_localized_text("score_text"), score);
+
+    draw_text(score_string, 2, 25);
+    draw_text(get_localized_text("snake_description"), 20, 25);
 }
 
 void check_for_collisions() {
@@ -160,7 +163,7 @@ void is_outside_boundary() {
     int x = snake->body->pos.x;
     int y = snake->body->pos.y;
 
-    if (x < 1 || x > GAME_WIDTH - 1 || y < 1 || y > GAME_HEIGHT - 1) {
+    if (x < 1 || x > (WINDOW_WIDTH - 2) || y < 1 || y > WINDOW_HEIGHT - 2) {
         is_running = false;
         printf("You score is: %d", score);
     }

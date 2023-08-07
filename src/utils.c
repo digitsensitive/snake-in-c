@@ -1,6 +1,6 @@
-#include <stdlib.h>
+#include "utils.h"
 
-#include "constants.h"
+#include <stdlib.h>
 
 // Function to generate a random integer between min and max (inclusive)
 int get_random_int(int min, int max) {

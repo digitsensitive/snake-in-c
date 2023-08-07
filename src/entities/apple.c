@@ -3,12 +3,13 @@
 #include <ncurses.h>
 #include <stdlib.h>
 
-#include "../constants.h"
 #include "../ncurses/ncurses_utils.h"
+#include "../ncurses/ncurses_window.h"
+#include "../utils.h"
 
-Apple* create_apple(int x, int y) {
+Apple* create_apple(char ch, int x, int y) {
     Apple* apple = (Apple*)malloc(sizeof(Apple));
-    apple->base.display_char = 'O';
+    apple->base.display_char = ch;
     apple->base.color = ANSI_COLOR_GREEN;
     apple->pos.x = x;
     apple->pos.y = y;
@@ -26,6 +27,6 @@ void render_apple(Apple* self) {
 }
 
 void reset_apple_position(Apple* self) {
-    self->pos.x = get_random_int(1, GAME_WIDTH - 1);
-    self->pos.y = get_random_int(1, GAME_HEIGHT - 1);
+    self->pos.x = get_random_int(1, WINDOW_WIDTH - 2);
+    self->pos.y = get_random_int(1, WINDOW_HEIGHT - 2);
 }

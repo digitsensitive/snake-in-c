@@ -18,6 +18,7 @@
     "__locale": "c",
     "entity.h": "c",
     "apple.h": "c",
-    "ncurses_window.h": "c"
+    "ncurses_window.h": "c",
+    "clock.h": "c"
   }
 }

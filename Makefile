@@ -3,8 +3,9 @@ CFLAGS = -std=c11 -Wall
 LDFLAGS = -Lvendors/ncurses -lncurses
 
 SRCS = src/main.c \
-	   src/utils.c \
 	   src/game.c \
+	   src/utils.c \
+	   src/clock.c \
 	   src/languages.c \
 	   src/ncurses/ncurses_window.c \
 	   src/ncurses/ncurses_utils.c \
