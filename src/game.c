@@ -5,6 +5,7 @@
 #include <time.h>
 
 #include "constants.h"
+#include "languages.h"
 #include "ncurses/ncurses_utils.h"
 #include "ncurses/ncurses_window.h"
 
@@ -61,6 +62,9 @@ int init() {
 }
 
 void run() {
+    // set language
+    set_language(EN);
+
     snake = create_snake(10, 5);
     apple = create_apple(20, 10);
 
@@ -124,12 +128,12 @@ void update(float deltaTime) {
 void render() {
     render_apple(apple);
     render_snake(snake);
-    char* greetings = "Snake written in C for the Terminal. ";
-    char* scoreText = "Score: ";
-    char combinedString[100];  // Choose an appropriate buffer size
-    sprintf(combinedString, "%s%d", scoreText, score);
-    mvprintw(24, 2, "%s", combinedString);
-    mvprintw(24, 30, "%s", greetings);
+    render_gui();
+}
+
+void render_gui() {
+    draw_text(get_localized_text("score_text"), 2, 24);
+    draw_text(get_localized_text("snake_description"), 30, 24);
 }
 
 void check_for_collisions() {

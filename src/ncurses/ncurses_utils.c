@@ -36,3 +36,7 @@ void draw_char(const char ch, const int x, const int y, enum ANSIColor color) {
     mvaddch(y, x, ch);
     attroff(COLOR_PAIR(color));
 }
+
+void draw_text(const char *text, const int x, const int y) {
+    mvprintw(y, x, text);
+}

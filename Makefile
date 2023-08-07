@@ -5,6 +5,7 @@ LDFLAGS = -Lvendors/ncurses -lncurses
 SRCS = src/main.c \
 	   src/utils.c \
 	   src/game.c \
+	   src/languages.c \
 	   src/ncurses/ncurses_window.c \
 	   src/ncurses/ncurses_utils.c \
 	   src/entities/entity.c \
