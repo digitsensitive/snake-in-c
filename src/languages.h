@@ -8,7 +8,6 @@ struct localized_text {
     const char* text;
 };
 
-// Define your localized strings here
 extern struct localized_text LOCALES[];
 
 void set_language(int language);
