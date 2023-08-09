@@ -6,17 +6,19 @@
 
 #include "../ncurses/ncurses_utils.h"
 
+int is_dying = 0;
+
 void update_snake(Snake* self) {
-    Snake* snake = (Snake*)self;
-    move_snake(snake);
+    if (!is_dying) {
+        move_snake(self);
+        snake_hit_snake(self);
+    }
 }
 
 void render_snake(Snake* self) {
-    Snake* snake = (Snake*)self;
-
     BodyNode* current = self->body;
     while (current != NULL) {
-        draw_char(snake->base.display_char, current->pos.x, current->pos.y,
+        draw_char(self->base.display_char, current->pos.x, current->pos.y,
                   self->base.color);
         current = current->next;
     }
@@ -42,6 +44,8 @@ Snake* create_snake(char ch, int x, int y) {
     // init base properties
     snake->base.display_char = ch;
     snake->base.color = ANSI_COLOR_YELLOW;
+    snake->base.update = (EntityUpdateFunc)update_snake;
+    snake->base.render = (EntityRenderFunc)render_snake;
     snake->is_growing = 0;
     snake->body = create_body_part(snake, x, y);
 
@@ -109,16 +113,26 @@ void free_snake(Snake* self) {
     }
 }
 
-int snake_hit_snake(Snake* self) {
+void is_outside_boundary(Snake* self, int w, int h) {
+    int x = self->body->pos.x;
+    int y = self->body->pos.y;
+
+    if (x < 1 || x > (w - 2) || y < 1 || y > h - 2) {
+        is_dying = 1;
+    }
+}
+
+void snake_hit_snake(Snake* self) {
     BodyNode* head = self->body;
     BodyNode* current = head->next;
 
     while (current != NULL) {
         if (head->pos.x == current->pos.x && head->pos.y == current->pos.y) {
-            return 1;
+            is_dying = 1;
         }
+
         current = current->next;
     }
-
-    return 0;
 }
+
+int is_snake_dying(Snake* self) { return is_dying; }

@@ -11,6 +11,8 @@ Apple* create_apple(char ch, int x, int y) {
     Apple* apple = (Apple*)malloc(sizeof(Apple));
     apple->base.display_char = ch;
     apple->base.color = ANSI_COLOR_GREEN;
+    apple->base.update = (EntityUpdateFunc)update_apple;
+    apple->base.render = (EntityRenderFunc)render_apple;
     apple->pos.x = x;
     apple->pos.y = y;
 

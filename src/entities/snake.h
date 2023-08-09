@@ -23,7 +23,9 @@ void update_snake(Snake* self);
 void render_snake(Snake* self);
 
 void set_snake_direction(Snake* snake, int x, int y);
+void is_outside_boundary(Snake* snake, int w, int h);
 void move_snake(Snake* self);
 void is_growing(Snake* self);
-int snake_hit_snake(Snake* self);
+void snake_hit_snake(Snake* self);
 void free_snake(Snake* self);
+int is_snake_dying(Snake* self);

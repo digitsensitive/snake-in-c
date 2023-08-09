@@ -12,8 +12,10 @@
 #include "utils.h"
 
 // Entities
-Snake* snake;
-Apple* apple;
+#define MAX_ENTITIES 2
+Entity *entities[MAX_ENTITIES];
+Snake *snake;
+Apple *apple;
 
 // Variables
 int score = 0;
@@ -66,9 +68,11 @@ void run() {
     set_language(EN);
 
     snake = create_snake('X', 10, 5);
+    entities[0] = (Entity *)snake;
     apple = create_apple('O', 20, 10);
+    entities[1] = (Entity *)apple;
 
-    while (is_running) {
+    while (is_running && !is_snake_dying(snake)) {
         input();
 
         // Calculate time elapsed since the last iteration
@@ -76,6 +80,23 @@ void run() {
 
         // Update the game state based on time elapsed
         update(get_delta_time());
+
+        // check snake-apple-collision
+        if (apple->pos.x == snake->body->pos.x &&
+            apple->pos.y == snake->body->pos.y) {
+            // collision between snake and apple occured
+            // add one point to the score
+            score += 1;
+
+            // set new random position for the apple
+            reset_apple_position(apple);
+
+            // grow snake
+            is_growing(snake);
+        }
+
+        // Check if snake is outside boundary
+        is_outside_boundary(snake, WINDOW_WIDTH, WINDOW_HEIGHT);
 
         // Render
         render();
@@ -87,7 +108,10 @@ void run() {
     }
 
     free_snake(snake);
-    free(snake);
+
+    for (int i = 0; i < MAX_ENTITIES; i++) {
+        free(entities[i]);
+    }
 }
 
 void input() {
@@ -119,54 +143,32 @@ void input() {
 }
 
 void update(float deltaTime) {
-    update_apple(apple);
-    update_snake(snake);
-    check_for_collisions();
-    is_outside_boundary();
+    for (int i = 0; i < MAX_ENTITIES; i++) {
+        Entity *entity = entities[i];
+        if (entity && entity->update) {
+            entity->update(entity);
+        }
+    }
 }
 
 void render() {
-    render_apple(apple);
-    render_snake(snake);
+    // render entities
+    for (int i = 0; i < MAX_ENTITIES; i++) {
+        Entity *entity = entities[i];
+        if (entity && entity->render) {
+            entity->render(entity);
+        }
+    }
+
+    // render GUI
     render_gui();
 }
 
 void render_gui() {
     // combine score string with score int
     sprintf(score_string, "%s%d", get_localized_text("score_text"), score);
-
     draw_text(score_string, 2, 25);
     draw_text(get_localized_text("snake_description"), 20, 25);
-}
-
-void check_for_collisions() {
-    if (snake_hit_snake(snake)) {
-        is_running = false;
-        printf("You score is: %d", score);
-    }
-
-    if (apple->pos.x == snake->body->pos.x &&
-        apple->pos.y == snake->body->pos.y) {
-        // collision between snake and apple occured
-        // add one point to the score
-        score += 1;
-
-        // set new random position for the apple
-        reset_apple_position(apple);
-
-        // grow snake
-        is_growing(snake);
-    }
-}
-
-void is_outside_boundary() {
-    int x = snake->body->pos.x;
-    int y = snake->body->pos.y;
-
-    if (x < 1 || x > (WINDOW_WIDTH - 2) || y < 1 || y > WINDOW_HEIGHT - 2) {
-        is_running = false;
-        printf("You score is: %d", score);
-    }
 }
 
 void shutdown() { endwin(); }
