@@ -50,10 +50,10 @@ Snake* create_snake(char ch, int x, int y) {
     return snake;
 }
 
-void set_snake_direction(Snake* snake, int x, int y) {
-    if (snake->dir.x != -x || snake->dir.y != -y) {
-        snake->dir.x = x;
-        snake->dir.y = y;
+void set_snake_direction(Snake* self, int x, int y) {
+    if (self->dir.x != -x || self->dir.y != -y) {
+        self->dir.x = x;
+        self->dir.y = y;
     }
 }
 

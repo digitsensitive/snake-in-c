@@ -23,8 +23,8 @@ BodyNode* create_body_part(Snake* self, int x, int y);
 void update_snake(Snake* self);
 void render_snake(Snake* self);
 
-void set_snake_direction(Snake* snake, int x, int y);
-void is_outside_boundary(Snake* snake, int w, int h);
+void set_snake_direction(Snake* self, int x, int y);
+void is_outside_boundary(Snake* self, int w, int h);
 void move_snake(Snake* self);
 void is_growing(Snake* self);
 void snake_hit_snake(Snake* self);
