@@ -14,6 +14,7 @@ struct Snake {
     BodyNode* body;
     Position dir;
     int is_growing;
+    int is_dying;
 };
 
 Snake* create_snake(char ch, int x, int y);

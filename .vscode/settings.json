@@ -1,24 +1,3 @@
 {
-  "files.associations": {
-    "ios": "c",
-    "__hash_table": "c",
-    "__split_buffer": "c",
-    "array": "c",
-    "bitset": "c",
-    "initializer_list": "c",
-    "string": "c",
-    "string_view": "c",
-    "unordered_map": "c",
-    "vector": "c",
-    "iterator": "c",
-    "utility": "c",
-    "snake.h": "c",
-    "time.h": "c",
-    "signal.h": "c",
-    "__locale": "c",
-    "entity.h": "c",
-    "apple.h": "c",
-    "ncurses_window.h": "c",
-    "clock.h": "c"
-  }
+  "files.associations": {}
 }

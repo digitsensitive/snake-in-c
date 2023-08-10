@@ -6,13 +6,9 @@
 
 #include "../ncurses_api.h"
 
-int is_dying = 0;
-
 void update_snake(Snake* self) {
-    if (!is_dying) {
-        move_snake(self);
-        snake_hit_snake(self);
-    }
+    move_snake(self);
+    snake_hit_snake(self);
 }
 
 void render_snake(Snake* self) {
@@ -47,6 +43,7 @@ Snake* create_snake(char ch, int x, int y) {
     snake->base.update = (EntityUpdateFunc)update_snake;
     snake->base.render = (EntityRenderFunc)render_snake;
     snake->is_growing = 0;
+    snake->is_dying = 0;
     snake->body = create_body_part(snake, x, y);
 
     set_snake_direction(snake, 1, 0);
@@ -118,7 +115,7 @@ void is_outside_boundary(Snake* self, int w, int h) {
     int y = self->body->pos.y;
 
     if (x < 1 || x > (w - 2) || y < 1 || y > h - 2) {
-        is_dying = 1;
+        self->is_dying = 1;
     }
 }
 
@@ -128,11 +125,11 @@ void snake_hit_snake(Snake* self) {
 
     while (current != NULL) {
         if (head->pos.x == current->pos.x && head->pos.y == current->pos.y) {
-            is_dying = 1;
+            self->is_dying = 1;
         }
 
         current = current->next;
     }
 }
 
-int is_snake_dying(Snake* self) { return is_dying; }
+int is_snake_dying(Snake* self) { return self->is_dying; }

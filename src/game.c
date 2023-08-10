@@ -16,15 +16,10 @@ Entity *entities[MAX_ENTITIES];
 Snake *snake;
 Apple *apple;
 
-// Variables
-int score = 0;
-char score_string[30];
-bool is_running = true;
-
-int init() {
+Game *init_game() {
     if (!init_ncurses_window()) {
         fprintf(stderr, "Error initializing ncurses.\n");
-        return 0;
+        return NULL;
     }
 
     cbreak();
@@ -44,7 +39,7 @@ int init() {
     // init colors for the terminal
     if (!init_colors()) {
         endwin();
-        return 0;
+        return NULL;
     }
 
     // resize the game field
@@ -59,10 +54,16 @@ int init() {
     // Seed the random number generator with the current time
     srand(time(NULL));
 
-    return 1;
-}
+    Game *game = (Game *)malloc(sizeof(Game));
 
-void run() {
+    if (game == NULL) {
+        fprintf(stderr, "Error initializing game instance.\n");
+        return NULL;
+    }
+
+    game->score = 0;
+    game->is_running = 1;
+
     // set language
     set_language(EN);
 
@@ -71,8 +72,12 @@ void run() {
     apple = create_apple('O', 20, 10);
     entities[1] = (Entity *)apple;
 
-    while (is_running && !is_snake_dying(snake)) {
-        input();
+    return game;
+}
+
+void run_game(Game *game) {
+    if (!snake->is_dying) {
+        input(game);
 
         // Calculate time elapsed since the last iteration
         calculate_time_elapsed();
@@ -85,7 +90,7 @@ void run() {
             apple->pos.y == snake->body->pos.y) {
             // collision between snake and apple occured
             // add one point to the score
-            score += 1;
+            game->score += 1;
 
             // set new random position for the apple
             reset_apple_position(apple);
@@ -97,28 +102,27 @@ void run() {
         // Check if snake is outside boundary
         is_outside_boundary(snake, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-        // Render
+        // Render Entities
         render();
+
+        // render GUI
+        render_gui(game);
 
         // Delay to achieve the desired FPS
         delay_clock();
 
         refresh();
-    }
-
-    free_snake(snake);
-
-    for (int i = 0; i < MAX_ENTITIES; i++) {
-        free(entities[i]);
+    } else {
+        game->is_running = 0;
     }
 }
 
-void input() {
+void input(Game *game) {
     int in_char = wgetch(main_window);
 
     switch (in_char) {
         case 'q':
-            is_running = false;
+            game->is_running = 0;
             break;
         case KEY_UP:
         case 'w':
@@ -158,16 +162,22 @@ void render() {
             entity->render(entity);
         }
     }
-
-    // render GUI
-    render_gui();
 }
 
-void render_gui() {
+void render_gui(Game *game) {
     // combine score string with score int
-    sprintf(score_string, "%s%d", get_localized_text("score_text"), score);
-    draw_text(score_string, 2, 25);
+    sprintf(game->score_string, "%s%d", get_localized_text("score_text"),
+            game->score);
+    draw_text(game->score_string, 2, 25);
     draw_text(get_localized_text("snake_description"), 20, 25);
 }
 
-void shutdown() { endwin(); }
+void shutdown() {
+    free_snake(snake);
+
+    for (int i = 0; i < MAX_ENTITIES; i++) {
+        free(entities[i]);
+    }
+
+    endwin();
+}
