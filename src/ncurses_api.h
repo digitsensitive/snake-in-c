@@ -17,7 +17,7 @@ extern const int WINDOW_WIDTH;
 extern const int WINDOW_HEIGHT;
 extern WINDOW* main_window;
 
-int init_ncurses_window();
+int init_ncurses();
 int init_colors();
 void draw_char(const char ch, const int x, const int y, enum ANSIColor color);
 void draw_text(const char* text, const int x, const int y);

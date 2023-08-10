@@ -17,39 +17,10 @@ Snake *snake;
 Apple *apple;
 
 Game *init_game() {
-    if (!init_ncurses_window()) {
+    if (!init_ncurses()) {
         fprintf(stderr, "Error initializing ncurses.\n");
         return NULL;
     }
-
-    cbreak();
-    noecho();
-    clear();
-    refresh();
-
-    // enable function keys
-    keypad(main_window, true);
-
-    // disable input blocking (f.e. for getch() and wgetch())
-    nodelay(main_window, true);
-
-    // set the cursor mode to "Invisible"
-    curs_set(0);
-
-    // init colors for the terminal
-    if (!init_colors()) {
-        endwin();
-        return NULL;
-    }
-
-    // resize the game field
-    resize_term(WINDOW_HEIGHT, WINDOW_WIDTH);
-
-    // draw a box around the screen
-    box(main_window, 0, 0);
-
-    // resize the window to fit text at the bottom
-    resize_term(WINDOW_HEIGHT + 1, WINDOW_WIDTH);
 
     // Seed the random number generator with the current time
     srand(time(NULL));
