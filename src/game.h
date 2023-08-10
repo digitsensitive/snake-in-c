@@ -2,7 +2,6 @@
 
 typedef struct {
     unsigned int score;
-    char score_string[30];
     int is_running;
 } Game;
 

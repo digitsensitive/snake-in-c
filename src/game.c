@@ -15,6 +15,7 @@
 Entity *entities[MAX_ENTITIES];
 Snake *snake;
 Apple *apple;
+char score_string[30];
 
 Game *init_game() {
     if (!init_ncurses()) {
@@ -137,9 +138,9 @@ void render() {
 
 void render_gui(Game *game) {
     // combine score string with score int
-    sprintf(game->score_string, "%s%d", get_localized_text("score_text"),
+    sprintf(score_string, "%s%d", get_localized_text("score_text"),
             game->score);
-    draw_text(game->score_string, 2, 25);
+    draw_text(score_string, 2, 25);
     draw_text(get_localized_text("snake_description"), 20, 25);
 }
 
