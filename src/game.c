@@ -7,8 +7,7 @@
 #include "entities/apple.h"
 #include "entities/snake.h"
 #include "languages.h"
-#include "ncurses/ncurses_utils.h"
-#include "ncurses/ncurses_window.h"
+#include "ncurses_api.h"
 #include "utils.h"
 
 // Entities

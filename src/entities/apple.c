@@ -3,8 +3,7 @@
 #include <ncurses.h>
 #include <stdlib.h>
 
-#include "../ncurses/ncurses_utils.h"
-#include "../ncurses/ncurses_window.h"
+#include "../ncurses_api.h"
 #include "../utils.h"
 
 Apple* create_apple(char ch, int x, int y) {

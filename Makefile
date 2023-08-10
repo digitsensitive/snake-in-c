@@ -7,8 +7,7 @@ SRCS = src/main.c \
 	   src/utils.c \
 	   src/clock.c \
 	   src/languages.c \
-	   src/ncurses/ncurses_window.c \
-	   src/ncurses/ncurses_utils.c \
+	   src/ncurses_api.c \
 	   src/entities/entity.c \
 	   src/entities/snake.c \
 	   src/entities/apple.c

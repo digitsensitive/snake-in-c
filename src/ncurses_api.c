@@ -1,6 +1,18 @@
-#include "ncurses_utils.h"
+#include "ncurses_api.h"
 
-#include <ncurses.h>
+const int WINDOW_WIDTH = 70;
+const int WINDOW_HEIGHT = 25;
+
+WINDOW* main_window;
+
+int init_ncurses_window() {
+    if ((main_window = initscr()) == NULL) {
+        fprintf(stderr, "Error initializing ncurses window.\n");
+        return 0;
+    }
+
+    return 1;
+}
 
 /**
  * Activate colors for the terminal
@@ -37,6 +49,6 @@ void draw_char(const char ch, const int x, const int y, enum ANSIColor color) {
     attroff(COLOR_PAIR(color));
 }
 
-void draw_text(const char *text, const int x, const int y) {
+void draw_text(const char* text, const int x, const int y) {
     mvprintw(y, x, text);
 }

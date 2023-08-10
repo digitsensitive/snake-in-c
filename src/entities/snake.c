@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../ncurses/ncurses_utils.h"
+#include "../ncurses_api.h"
 
 int is_dying = 0;
 
