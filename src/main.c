@@ -8,7 +8,7 @@ int main(int argc, char **argv) {
 
     if (game == NULL) {
         fprintf(stderr, "Error initializing game instance.\n");
-        return 0;
+        return 1;
     }
 
     while (game->is_running) {
